@@ -1,3 +1,8 @@
 class Encoder:
-    def __init__(self, *args: object, **kwargs: object) -> None:
+    def __init__(
+        self,
+        model: str,
+        backends: str = "transformers",
+        device: str = "cpu",
+    ) -> None:
         pass
