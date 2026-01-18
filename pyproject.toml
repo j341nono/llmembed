@@ -1,6 +1,6 @@
 [project]
-name = "llmembed"
-version = "0.0.1"
+name = "llm-embed"
+version = "0.1.0"
 description = "Embedding extractor for decoder-only LLMs"
 readme = "README.md"
 requires-python = ">=3.9"
