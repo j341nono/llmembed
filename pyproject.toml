@@ -3,20 +3,26 @@ name = "llmembed"
 version = "0.0.1"
 description = "Embedding extractor for decoder-only LLMs"
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.9"
 dependencies = [
-    "torch>=2.9.1",
-    "transformers>=4.57.5",
+    "accelerate>=1.10.1",
+    "numpy>=2.0.2",
+    "torch>=2.0.0",
+    "transformers>=4.30.0",
 ]
 
 [project.optional-dependencies]
 vllm = ["vllm"]
+quantization = [
+    "bitsandbytes>=0.48.2",
+]
 
 [dependency-groups]
 dev = [
-    "mypy>=1.19.1",
-    "pytest>=9.0.2",
-    "ruff>=0.14.12",
+    "mkdocs-material>=9.7.1",
+    "mypy>=1.0.0",
+    "pytest>=7.0.0",
+    "ruff>=0.1.0",
 ]
 
 [build-system]
@@ -33,9 +39,16 @@ line-length = 100
 select = ["E", "F", "I"]
 
 [tool.mypy]
-python_version = "3.13"
+python_version = "3.9"
 strict = true
+follow_imports = "skip"
 ignore_missing_imports = true
+# Exclude virtual environment directories
+exclude = [
+    "\\.venv",
+    "venv",
+    ".venv"
+]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
