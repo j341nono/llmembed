@@ -71,6 +71,37 @@ enc = llmembed.Encoder(
 embeddings = enc.encode("Hello world", pooling="pcoteol")
 ```
 
+## Transformers Backend Configuration
+
+When using the `transformers` backend, you can pass standard Hugging Face `AutoModel` arguments directly to the `Encoder`.
+
+**Example 1: Using Flash Attention 2**
+
+```python
+import torch
+
+encoder = Encoder(
+    model_name="meta-llama/Llama-3.1-8B",
+    backend="transformers",
+    attn_implementation="flash_attention_2",
+    torch_dtype=torch.bfloat16
+)
+```
+
+**Example 2: Custom Quantization Config**
+
+```python
+from transformers import BitsAndBytesConfig
+
+bnb_config = BitsAndBytesConfig(load_in_4bit=True, bnb_4bit_compute_dtype=torch.bfloat16)
+
+encoder = Encoder(
+    model_name="meta-llama/Llama-3.1-8B",
+    backend="transformers",
+    quantization_config=bnb_config
+)
+```
+
 ## vLLM Backend Configuration
 
 When using the `vllm` backend, you can pass native vLLM configuration arguments directly to the `Encoder`. This allows full control over memory usage, parallelism, and model length.

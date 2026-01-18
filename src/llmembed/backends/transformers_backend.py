@@ -40,13 +40,16 @@ class TransformersBackend(Backend):
         self.model = None
         self.tokenizer = None
         
-        # Extract model_kwargs if present
-        model_kwargs = kwargs.pop("model_kwargs", {})
-        self._load_model(model_kwargs)
+        # Merge model_kwargs into kwargs if present for backward compatibility or explicit usage
+        if "model_kwargs" in kwargs:
+            kwargs.update(kwargs.pop("model_kwargs"))
+            
+        self._load_model(kwargs)
 
-    def _load_model(self, model_kwargs: "Dict[str, Any]") -> None:
+    def _load_model(self, load_kws: "Dict[str, Any]") -> None:
         quantization_config = None
-        load_kws = model_kwargs.copy()
+        # Make a copy to avoid mutating the original kwargs if used elsewhere
+        load_kws = load_kws.copy()
         
         if self.quantization:
             if self.quantization == "4bit":
