@@ -8,9 +8,13 @@ def test_transformers():
         backend="transformers",
         device="cpu"
     )
-    emb = enc.encode("Hello world")
-    print(f"Transformers embedding shape: {emb.shape}")
-    assert emb.shape[0] == 1
+    try:
+        emb = enc.encode("Hello world")
+        print(f"Transformers embedding shape: {emb.shape}")
+        assert emb.shape[0] == 1
+    except Exception as e:
+        print(f"Transformers Test Failed: {e}")
+        sys.exit(1)
 
 def test_vllm():
     print("\nTesting VLLM Backend...")
@@ -33,6 +37,7 @@ def test_vllm():
         assert emb.shape[0] == 1
     except Exception as e:
         print(f"VLLM Test Failed: {e}")
+        sys.exit(1)
 
 if __name__ == "__main__":
     test_transformers()

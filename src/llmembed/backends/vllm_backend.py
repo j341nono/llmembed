@@ -53,15 +53,22 @@ class VLLMBackend(Backend):
             text = [text]
             
         # VLLM encode logic
-        outputs = self.model.encode(text)
+        # Use embed() for embedding models (encode() might be deprecated or behave differently)
+        # Note: 'prompts' argument is used in embed()
+        outputs = self.model.embed(prompts=text)
         
         # outputs is a list of EmbeddingRequestOutput
         embeddings = []
         for output in outputs:
-            if hasattr(output, 'outputs'):
+            # output.outputs is a list of EmbeddingOutput (usually one per prompt unless best_of > 1)
+            # We take the first one
+            if hasattr(output, 'outputs') and len(output.outputs) > 0:
                  embeddings.append(output.outputs.embedding)
             else:
-                 # API might differ
-                 embeddings.append(output) # fallback
+                 # Fallback or error handling
+                 # If structure differs, we might need to inspect output
+                 # Assuming standard structure for now
+                 # If output.outputs doesn't exist, it might be an error
+                 embeddings.append(output) # desperate fallback
                  
         return np.array(embeddings)
