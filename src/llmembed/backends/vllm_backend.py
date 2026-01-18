@@ -25,10 +25,13 @@ class VLLMBackend(Backend):
             )
         
         # User is responsible for memory config via kwargs (gpu_memory_utilization, etc.)
+        # Ensure trust_remote_code is set if not provided, but don't double pass it
+        if "trust_remote_code" not in kwargs:
+            kwargs["trust_remote_code"] = True
+
         self.model = LLM(
             model=model_name,
             quantization=quantization,
-            trust_remote_code=True,
             **kwargs
         )
 
