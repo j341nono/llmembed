@@ -4,7 +4,7 @@ Unified embedding extraction from Decoder-only LLMs.
 
 ## Features
 
-- **Backends**: Support for Hugging Face Transformers and VLLM.
+- **Backends**: Support for Hugging Face Transformers.
 - **Pooling Strategies**:
     - `mean`: Average pooling of all tokens (excluding padding).
     - `last_token`: Vector of the last token.
@@ -23,12 +23,6 @@ Install using `uv`:
 
 ```bash
 uv add llmembed
-```
-
-To include VLLM support:
-
-```bash
-uv add llmembed[vllm]
 ```
 
 To include quantization support:
@@ -102,29 +96,15 @@ encoder = Encoder(
 )
 ```
 
-## vLLM Backend Configuration
-
-When using the `vllm` backend, you can pass native vLLM configuration arguments directly to the `Encoder`. This allows full control over memory usage, parallelism, and model length.
-
-```python
-encoder = Encoder(
-    model_name="meta-llama/Llama-3.1-8B",
-    backend="vllm",
-    gpu_memory_utilization=0.9, # Example of user control: allocate 90% GPU memory
-    max_model_len=4096,         # Limit context length
-    tensor_parallel_size=1      # Number of GPUs to use
-)
-```
-
 ## References
 
-**For PromptEOL:**
+- **PromptEOL:**
 
-Ting Jiang, Shaohan Huang, Zhongzhi Luan, Deqing Wang, and Fuzhen Zhuang. 2024. Scaling Sentence Embeddings with Large Language Models. Findings of the Association for Computational Linguistics: EMNLP 2024.
+    Ting Jiang, Shaohan Huang, Zhongzhi Luan, Deqing Wang, and Fuzhen Zhuang. 2024. Scaling Sentence Embeddings with Large Language Models. Findings of the Association for Computational Linguistics: EMNLP 2024.
 
-**For PCoTEOL and KE:**
+- **PCoTEOL and KE:**
 
-Bowen Zhang, Kehua Chang, and Chunping Li. 2024. Simple Techniques for Enhancing Sentence Embeddings in Generative Language Models. arXiv preprint arXiv:2404.03921.
+    Bowen Zhang, Kehua Chang, and Chunping Li. 2024. Simple Techniques for Enhancing Sentence Embeddings in Generative Language Models. arXiv preprint arXiv:2404.03921.
 
 ## Development
 
