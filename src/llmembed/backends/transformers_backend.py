@@ -45,14 +45,14 @@ class TransformersBackend(Backend):
         
         if self.quantization:
             if self.quantization == "4bit":
-                quantization_config = BitsAndBytesConfig(load_in_4bit=True) # type: ignore
+                quantization_config = BitsAndBytesConfig(load_in_4bit=True)
             elif self.quantization == "8bit":
-                quantization_config = BitsAndBytesConfig(load_in_8bit=True) # type: ignore
+                quantization_config = BitsAndBytesConfig(load_in_8bit=True)
             
             if quantization_config:
                 load_kws["quantization_config"] = quantization_config
         
-        self.tokenizer = AutoTokenizer.from_pretrained(self.model_name) # type: ignore
+        self.tokenizer = AutoTokenizer.from_pretrained(self.model_name)
         assert self.tokenizer is not None
         if self.tokenizer.pad_token is None:
             self.tokenizer.pad_token = self.tokenizer.eos_token

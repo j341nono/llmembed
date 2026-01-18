@@ -41,6 +41,7 @@ select = ["E", "F", "I"]
 [tool.mypy]
 python_version = "3.9"
 strict = true
+follow_imports = "skip"
 ignore_missing_imports = true
 # Exclude virtual environment directories
 exclude = [
