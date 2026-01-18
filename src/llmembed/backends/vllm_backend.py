@@ -60,7 +60,8 @@ class VLLMBackend(Backend):
         # outputs is a list of EmbeddingRequestOutput
         embeddings = []
         for output in outputs:
-            # output.outputs is a list of EmbeddingOutput (usually one per prompt unless best_of > 1)
+            # output.outputs is a list of EmbeddingOutput
+            # (usually one per prompt unless best_of > 1)
             # We take the first one
             if hasattr(output, 'outputs') and len(output.outputs) > 0:
                  embeddings.append(output.outputs.embedding)
