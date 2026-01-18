@@ -1,4 +1,5 @@
 from typing import Any, List, Optional, Union
+
 import numpy as np
 
 try:
@@ -8,6 +9,7 @@ except ImportError:
     PoolingParams = None
 
 from ..interfaces import Backend
+
 
 class VLLMBackend(Backend):
     def __init__(

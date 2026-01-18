@@ -1,9 +1,11 @@
-from typing import Any, List, Optional, Union, Dict
-import torch
+from typing import Any, Dict, List, Optional, Union
+
 import numpy as np
+import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 
 from ..interfaces import Backend
+
 
 class TransformersBackend(Backend):
     def __init__(

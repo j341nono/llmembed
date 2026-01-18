@@ -26,7 +26,8 @@ class Encoder:
             backend: Backend to use ('transformers', 'vllm').
             device: Device ('cpu', 'cuda', etc.). If None, auto-detects.
             quantization: Quantization config ('4bit', '8bit', or None).
-            **kwargs: Additional arguments passed to the backend (e.g., model_kwargs, gpu_memory_utilization).
+            **kwargs: Additional arguments passed to the backend
+                      (e.g., model_kwargs, gpu_memory_utilization).
         """
         self.backend_name = backend
         self.backend_instance: Backend
