@@ -15,7 +15,7 @@ class VLLMBackend(Backend):
     def __init__(
         self,
         model_name: str,
-        device: str = "auto",
+        device: Optional[str] = None, # Was str="auto"
         quantization: Optional[str] = None
     ):
         if LLM is None:
@@ -25,7 +25,10 @@ class VLLMBackend(Backend):
         
         # VLLM handles device placement automatically usually, but we can pass
         # trust_remote_code etc.
-        # quantization: 'awq', 'gptq', 'squeezellm', etc.
+        # If device is passed and not auto/None, we might need to handle it.
+        # But VLLM usually takes device via other args or env vars.
+        # For now, ignore device arg if it's just meant for auto-detect logic in core.
+        
         self.model = LLM(
             model=model_name,
             quantization=quantization,

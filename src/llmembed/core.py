@@ -14,7 +14,7 @@ class Encoder:
         self,
         model_name: str,
         backend: str = "transformers",
-        device: str = "cpu",
+        device: Optional[str] = None,
         quantization: Optional[str] = None
     ):
         """
@@ -23,7 +23,7 @@ class Encoder:
         Args:
             model_name: Model identifier.
             backend: Backend to use ('transformers', 'vllm').
-            device: Device ('cpu', 'cuda', etc.).
+            device: Device ('cpu', 'cuda', etc.). If None, auto-detects.
             quantization: Quantization config ('4bit', '8bit', or None).
         """
         self.backend_name = backend
@@ -57,7 +57,8 @@ class Encoder:
 
         Args:
             text: Input text or list of texts.
-            pooling: Pooling strategy ('mean', 'last_token', 'eos_token', 'prompt_eol').
+            pooling: Pooling strategy ('mean', 'last_token', 'eos_token', 'prompt_eol',
+                                     'pcoteol', 'ke').
             layer_index: Layer index to extract embeddings from.
             **kwargs: Backend specific arguments.
 

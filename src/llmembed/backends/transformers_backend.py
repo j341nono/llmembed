@@ -11,7 +11,7 @@ class TransformersBackend(Backend):
     def __init__(
         self,
         model_name: str,
-        device: str = "cpu",
+        device: Optional[str] = None,
         quantization: Optional[str] = None
     ):
         """
@@ -19,12 +19,22 @@ class TransformersBackend(Backend):
         
         Args:
             model_name: HuggingFace model identifier.
-            device: Device to load model on ('cpu', 'cuda', 'mps').
+            device: Device to load model on ('cpu', 'cuda', 'mps'). If None, auto-detects.
             quantization: Quantization config ('4bit', '8bit', or None).
         """
         self.model_name = model_name
-        self.device = device
         self.quantization = quantization
+        
+        if device is None:
+            if torch.cuda.is_available():
+                self.device = "cuda"
+            elif torch.backends.mps.is_available():
+                 self.device = "mps"
+            else:
+                self.device = "cpu"
+        else:
+            self.device = device
+            
         self.model = None
         self.tokenizer = None
         self._load_model()
@@ -71,6 +81,18 @@ class TransformersBackend(Backend):
             
         if pooling == "prompt_eol":
             text = [f'This Sentence : "{t}" means in one word:"' for t in text]
+        elif pooling == "pcoteol":
+            text = [
+                f'After thinking step by step, this sentence : "{t}" means in one word:"'
+                for t in text
+            ]
+        elif pooling == "ke":
+            text = [
+                f'The essence of a sentence is often captured by its main subjects and actions, '
+                f'while descriptive terms provide additional but less central details. '
+                f'With this in mind , this sentence : "{t}" means in one word:"' 
+                for t in text
+            ]
             
         inputs = self.tokenizer(
             text,
@@ -137,7 +159,7 @@ class TransformersBackend(Backend):
                      embeddings_list.append(hidden_states[i, last_idx])
              embeddings = torch.stack(embeddings_list)
 
-        elif pooling == "prompt_eol":
+        elif pooling in ["prompt_eol", "pcoteol", "ke"]:
             # Extract the very last token (corresponding to the final ")
             # Use attention_mask to find the last non-padding token
             seq_lengths = inputs.attention_mask.sum(dim=1) - 1
