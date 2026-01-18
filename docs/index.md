@@ -98,13 +98,13 @@ encoder = Encoder(
 
 ## References
 
-- **PromptEOL:**
+**For PromptEOL:**
 
-    Ting Jiang, Shaohan Huang, Zhongzhi Luan, Deqing Wang, and Fuzhen Zhuang. 2024. Scaling Sentence Embeddings with Large Language Models. Findings of the Association for Computational Linguistics: EMNLP 2024.
+Ting Jiang, Shaohan Huang, Zhongzhi Luan, Deqing Wang, and Fuzhen Zhuang. 2024. Scaling Sentence Embeddings with Large Language Models. Findings of the Association for Computational Linguistics: EMNLP 2024.
 
-- **PCoTEOL and KE:**
+**For PCoTEOL and KE:**
 
-    Bowen Zhang, Kehua Chang, and Chunping Li. 2024. Simple Techniques for Enhancing Sentence Embeddings in Generative Language Models. arXiv preprint arXiv:2404.03921.
+Bowen Zhang, Kehua Chang, and Chunping Li. 2024. Simple Techniques for Enhancing Sentence Embeddings in Generative Language Models. arXiv preprint arXiv:2404.03921.
 
 ## Development
 

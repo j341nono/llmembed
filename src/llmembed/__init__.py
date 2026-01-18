@@ -1,3 +1,3 @@
-from .encoder import Encoder
+from .core import Encoder
 
 __all__ = ["Encoder"]
