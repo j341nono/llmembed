@@ -1,4 +1,5 @@
 import pytest
+
 from llmembed.backends.transformers_backend import TransformersBackend
 
 MODEL = "sshleifer/tiny-gpt2"
@@ -33,11 +34,10 @@ def test_layer_index_default_mean(backend):
 
 def test_layer_index_override(backend):
     # Explicitly requesting -1 for pcoteol
-    emb_override = backend.encode("hello", pooling="pcoteol", layer_index=-1)
-    emb_default = backend.encode("hello", pooling="pcoteol", layer_index=None)
+    backend.encode("hello", pooling="pcoteol", layer_index=-1)
+    backend.encode("hello", pooling="pcoteol", layer_index=None)
     
     # Should likely differ (layer 2 vs layer 1)
     # Note: tiny-gpt2 layers might be very similar for short inputs, but usually differ.
-    import torch
     # assert not torch.allclose(emb_override, emb_default) 
     # Commented out strict check as tiny models can be weird, but logic path is exercised.

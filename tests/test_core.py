@@ -1,6 +1,8 @@
 import pytest
-from llmembed.core import Encoder
+
 from llmembed.backends.transformers_backend import TransformersBackend
+from llmembed.core import Encoder
+
 
 def test_encoder_init_transformers():
     enc = Encoder(model_name="sshleifer/tiny-gpt2", backend="transformers")

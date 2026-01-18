@@ -1,6 +1,6 @@
 import pytest
 import torch
-import numpy as np
+
 from llmembed.backends.transformers_backend import TransformersBackend
 
 MODEL = "sshleifer/tiny-gpt2"
@@ -18,7 +18,8 @@ def test_encode_mean(backend):
     assert isinstance(emb, torch.Tensor)
     assert emb.ndim == 2
     assert emb.shape[0] == 1
-    # tiny-gpt2 hidden size is 2 (config says n_embd=2? No, tiny-gpt2 is usually small but 768 is regular GPT2. tiny-gpt2 has n_embd=2)
+    # tiny-gpt2 hidden size is 2 (config says n_embd=2? No, tiny-gpt2 is usually small
+    # but 768 is regular GPT2. tiny-gpt2 has n_embd=2)
     # Actually sshleifer/tiny-gpt2: config.n_embd=64, n_layer=2, n_head=2.
     # Let's check shape[1] > 0.
     assert emb.shape[1] > 0

@@ -1,4 +1,5 @@
 import pytest
+
 from llmembed.backends.transformers_backend import TransformersBackend
 
 MODEL = "sshleifer/tiny-gpt2"
@@ -12,7 +13,8 @@ def test_encode_pcoteol(backend):
     emb = backend.encode(text, pooling="pcoteol")
     assert emb.shape[0] == 1
     # Check if template was applied? 
-    # We can't easily check internal state, but we can verify it doesn't crash and returns correct shape.
+    # We can't easily check internal state, but we can verify it doesn't crash 
+    # and returns correct shape.
 
 def test_encode_ke(backend):
     text = "hello world"
