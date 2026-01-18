@@ -72,7 +72,7 @@ class TransformersBackend(Backend):
         pooling: str = "mean",
         layer_index: Optional[int] = None,
         **kwargs: Any
-    ) -> Union[np.ndarray, torch.Tensor]:
+    ) -> Union["np.ndarray[Any, Any]", torch.Tensor]:
         if self.tokenizer is None or self.model is None:
             raise RuntimeError("Model or tokenizer not initialized")
 
