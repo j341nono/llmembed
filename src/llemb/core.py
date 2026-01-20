@@ -1,11 +1,15 @@
 from typing import Any, List, Optional, Union
+import logging
 
 from .backends.transformers_backend import TransformersBackend
 from .interfaces import Backend
 
-# Try importing VLLMBackend, might fail if vllm is not installed or dependencies missing
-# vLLM support removed in favor of focusing on transformers for hidden state extraction.
-# VLLMBackend = None
+try:
+    from .backends.vllm_backend import VLLMBackend
+except ImportError:
+    VLLMBackend = None
+
+logger = logging.getLogger(__name__)
 
 class Encoder:
     def __init__(
@@ -21,11 +25,12 @@ class Encoder:
 
         Args:
             model_name: Model identifier.
-            backend: Backend to use (only 'transformers' is supported).
+            backend: Backend to use ('transformers' or 'vllm').
             device: Device ('cpu', 'cuda', etc.). If None, auto-detects.
-            quantization: Quantization config ('4bit', '8bit', or None).
-            **kwargs: Additional arguments passed to the backend
-                      (e.g., model_kwargs).
+            quantization: Quantization config ('4bit', '8bit', or None for transformers; 
+                          'fp8', 'awq', 'gptq' etc. for vllm).
+            **kwargs: Additional arguments passed to the backend.
+                      For vllm, this includes 'tensor_parallel_size', 'gpu_memory_utilization', etc.
         """
         self.backend_name = backend
         self.backend_instance: Backend
@@ -37,8 +42,21 @@ class Encoder:
                 quantization=quantization, 
                 **kwargs
             )
+        elif backend == "vllm":
+            if VLLMBackend is None:
+                raise ImportError(
+                    "The 'vllm' backend is not available. "
+                    "Please install `vllm` and ensure `.backends.vllm_backend` exists."
+                )
+            
+            self.backend_instance = VLLMBackend(
+                model_name,
+                device=device,
+                quantization=quantization,
+                **kwargs
+            )
         else:
-            raise ValueError(f"Unknown backend: {backend}. Only 'transformers' is supported.")
+            raise ValueError(f"Unknown backend: {backend}. Supported backends are 'transformers' and 'vllm'.")
 
     def encode(
         self,
@@ -56,6 +74,7 @@ class Encoder:
                                      'pcoteol', 'ke').
             layer_index: Layer index to extract embeddings from.
                         Defaults to -2 for 'pcoteol'/'ke', and -1 for others.
+                        Note: vLLM backend typically only supports the last layer (-1).
             **kwargs: Backend specific arguments.
 
         Returns:
