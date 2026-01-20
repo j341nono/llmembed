@@ -1,7 +1,8 @@
+import numpy as np
 import pytest
 import torch
+
 import llemb
-import os
 
 TEST_MODEL_NAME = "gpt2"
 
@@ -74,23 +75,19 @@ class TestIntegration:
         
         emb_batched = enc.encode(SAMPLE_TEXTS, batch_size=2)
         
-        t_full = torch.as_tensor(emb_full)
-        t_batched = torch.as_tensor(emb_batched)
-        
         # NOTE: With absolute positional embeddings (like GPT-2) and left-padding,
         # changing batch size changes padding amount per batch, which shifts 
         # token positions and thus changes embeddings.
         # Strict equality is not expected unless using a model with relative positions
         # or if inputs are same length. We check shapes and validity here.
         assert emb_batched.shape == emb_full.shape
-        assert not torch.isnan(t_batched).any()
+        assert not torch.isnan(emb_batched).any()
 
     @pytest.mark.skipif(not torch.cuda.is_available(), reason="Quantization tests require CUDA")
     @pytest.mark.parametrize("quantization", ["4bit", "8bit"])
     def test_quantization(self, quantization):
-        try:
-            import bitsandbytes
-        except ImportError:
+        import importlib.util
+        if importlib.util.find_spec("bitsandbytes") is None:
             pytest.skip("bitsandbytes not installed")
 
         print(f"Testing quantization: {quantization}")
