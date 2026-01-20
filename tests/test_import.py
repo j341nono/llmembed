@@ -1,3 +1,3 @@
 def test_import():
-    import llmembed
-    assert llmembed is not None
+    import llemb
+    assert llemb is not None

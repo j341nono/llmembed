@@ -1,7 +1,7 @@
 import pytest
 
-from llmembed.backends.transformers_backend import TransformersBackend
-from llmembed.core import Encoder
+from llemb.backends.transformers_backend import TransformersBackend
+from llemb.core import Encoder
 
 
 def test_encoder_init_transformers():
