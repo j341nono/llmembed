@@ -156,8 +156,8 @@ class TransformersBackend(Backend):
 
             if not (-seq_len <= target_idx < seq_len):
                 logger.warning(
-                    f"Requested token_index={target_idx} is out of bounds for sequence length {seq_len}. "
-                    "Falling back to last token."
+                    f"Requested token_index={target_idx} is out of bounds "
+                    f"for sequence length {seq_len}. Falling back to last token."
                 )
                 seq_lengths = inputs.attention_mask.sum(dim=1) - 1
                 batch_indices = torch.arange(batch_size, device=hidden_states.device)
