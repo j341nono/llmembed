@@ -57,7 +57,6 @@ class VLLMBackend(Backend):
             "tensor_parallel_size": tensor_parallel_size,
             "enforce_eager": enforce_eager,
             "runner": "pooling",
-            "device": self.device,
         }
 
         if max_model_len:
