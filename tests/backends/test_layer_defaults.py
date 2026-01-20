@@ -1,6 +1,6 @@
 import pytest
 
-from llmembed.backends.transformers_backend import TransformersBackend
+from llemb.backends.transformers_backend import TransformersBackend
 
 MODEL = "sshleifer/tiny-gpt2"
 
