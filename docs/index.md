@@ -1,4 +1,4 @@
-# llmembed
+# llemb
 
 Unified embedding extraction from Decoder-only LLMs.
 
@@ -22,13 +22,13 @@ Unified embedding extraction from Decoder-only LLMs.
 Install using `uv`:
 
 ```bash
-uv add llmembed
+uv add llemb
 ```
 
 To include quantization support:
 
 ```bash
-uv add llmembed[quantization]
+uv add llemb[quantization]
 ```
 
 ## Quick Start
@@ -36,10 +36,10 @@ uv add llmembed[quantization]
 Initialize the encoder with minimal setup (defaults to transformers, no quantization, cpu/cuda auto-detect):
 
 ```python
-import llmembed
+import llemb
 
 # Minimal setup
-enc = llmembed.Encoder("meta-llama/Llama-3.1-8B")
+enc = llemb.Encoder("meta-llama/Llama-3.1-8B")
 
 # Extract embeddings
 embeddings = enc.encode("Hello world", pooling="mean")
@@ -51,10 +51,10 @@ print(embeddings.shape)
 Initialize with specific options:
 
 ```python
-import llmembed
+import llemb
 
 # Initialize encoder with specific backend and configuration
-enc = llmembed.Encoder(
+enc = llemb.Encoder(
     model_name="meta-llama/Llama-3.1-8B",
     backend="transformers",
     device="cuda", # Force CUDA
@@ -111,8 +111,8 @@ Bowen Zhang, Kehua Chang, and Chunping Li. 2024. Simple Techniques for Enhancing
 Clone the repository and sync dependencies:
 
 ```bash
-git clone https://github.com/j341nono/llmembed.git
-cd llmembed
+git clone https://github.com/j341nono/llemb.git
+cd llemb
 uv sync --all-extras --dev
 ```
 

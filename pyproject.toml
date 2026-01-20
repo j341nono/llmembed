@@ -1,5 +1,5 @@
 [project]
-name = "llm-embed"
+name = "llemb"
 version = "0.1.0"
 description = "Embedding extractor for decoder-only LLMs"
 readme = "README.md"
