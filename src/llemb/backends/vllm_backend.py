@@ -6,6 +6,12 @@ import torch
 
 from ..interfaces import Backend
 
+try:
+    from vllm import LLM, PoolingParams
+except ImportError:
+    LLM = None
+    PoolingParams = None
+
 logger = logging.getLogger(__name__)
 
 class VLLMBackend(Backend):
@@ -31,9 +37,7 @@ class VLLMBackend(Backend):
             tensor_parallel_size: Number of GPUs.
             **kwargs: Additional arguments passed to LLM init (e.g. enforce_eager).
         """
-        try:
-            from vllm import LLM, PoolingParams
-        except ImportError:
+        if LLM is None or PoolingParams is None:
             raise ImportError(
                 "VLLMBackend requires 'vllm'. "
                 "Please install it with `pip install vllm` or `pip install llemb[vllm]`."
