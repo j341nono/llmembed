@@ -160,7 +160,6 @@ encoder = llemb.Encoder(
 | `mean` | Average pooling of all tokens (excluding padding). | -1 (Last) |
 | `last_token` | Vector of the last generated token. | -1 (Last) |
 | `eos_token` | Vector corresponding to the EOS token position. | -1 (Last) |
-| `index` | Extract embedding from a specific token index (requires `pooling_config`). | User defined |
 | `prompt_eol` | Embeddings extracted using a prompt template targeting the last token. | -1 (Last) |
 | `pcoteol` | "Pretended Chain of Thought" - wraps input in a reasoning template. | -2 |
 | `ke` | "Knowledge Enhancement" - wraps input in a context-aware template. | -2 |
@@ -170,7 +169,7 @@ encoder = llemb.Encoder(
 Clone the repository and sync dependencies using `uv`:
 
 ```bash
-git clone [https://github.com/j341nono/llemb.git](https://github.com/j341nono/llemb.git)
+git clone https://github.com/j341nono/llemb.git
 cd llemb
 uv sync --all-extras --dev
 ```
