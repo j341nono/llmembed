@@ -1,8 +1,11 @@
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional, Union, TYPE_CHECKING
 
 import numpy as np
 import torch
-from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
+from transformers import AutoModelForCausalLM, AutoTokenizer
+
+if TYPE_CHECKING:
+    from transformers import BitsAndBytesConfig
 
 from ..interfaces import Backend
 
@@ -52,6 +55,14 @@ class TransformersBackend(Backend):
         load_kws = load_kws.copy()
         
         if self.quantization:
+            try:
+                from transformers import BitsAndBytesConfig
+            except ImportError:
+                raise ImportError(
+                    "Quantization requires 'bitsandbytes'. "
+                    "Please install it with `pip install llemb[quantization]`."
+                )
+            
             if self.quantization == "4bit":
                 quantization_config = BitsAndBytesConfig(load_in_4bit=True)
             elif self.quantization == "8bit":
