@@ -1,6 +1,9 @@
 import logging
 from typing import Any, List, Optional, Union
 
+import torch
+from tqdm import tqdm
+
 from .backends.transformers_backend import TransformersBackend
 from .interfaces import Backend
 
@@ -64,6 +67,7 @@ class Encoder:
         text: Union[str, List[str]],
         pooling: str = "mean",
         layer_index: Optional[int] = None,
+        batch_size: Optional[int] = None,
         **kwargs: Any,
     ) -> Any:
         """
@@ -76,11 +80,31 @@ class Encoder:
             layer_index: Layer index to extract embeddings from.
                         Defaults to -2 for 'pcoteol'/'ke', and -1 for others.
                         Note: vLLM backend typically only supports the last layer (-1).
+            batch_size: Batch size for processing. If None, processes all inputs at once.
             **kwargs: Backend specific arguments.
 
         Returns:
             Embeddings as numpy array or torch tensor.
         """
-        return self.backend_instance.encode(
-            text, pooling=pooling, layer_index=layer_index, **kwargs
-        )
+        if isinstance(text, str):
+            text = [text]
+
+        if batch_size is None:
+            return self.backend_instance.encode(
+                text, pooling=pooling, layer_index=layer_index, **kwargs
+            )
+
+        results = []
+        total = len(text)
+        
+        for i in tqdm(range(0, total, batch_size), desc="Encoding", disable=total <= batch_size):
+            batch_text = text[i : i + batch_size]
+            batch_emb = self.backend_instance.encode(
+                batch_text, pooling=pooling, layer_index=layer_index, **kwargs
+            )
+            # Ensure it's a tensor for concatenation logic
+            if not isinstance(batch_emb, torch.Tensor):
+                 batch_emb = torch.tensor(batch_emb)
+            results.append(batch_emb)
+            
+        return torch.cat(results, dim=0)
