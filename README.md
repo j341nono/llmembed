@@ -8,6 +8,9 @@
 
 With `llemb`, you can easily leverage powerful LLMs for embedding tasks using advanced techniques like **PromptEOL** and **PCoTEOL**, with built-in support for **Batch Processing** and **vLLM** for high-throughput inference.
 
+> **Origin of the Name**
+> **llemb** is a coined name derived from **LLM** and **Embedding**. In Japanese pronunciation, the letter *M* in **LLM** is read as /ɛm/ (emu), and **Embedding** begins with *Em*, which is pronounced /ɛm/ as well. Overlapping this sound reflects the idea of merging LLMs and embeddings.
+
 ## Features
 
 - **Flexible Backends**: Seamless support for **Hugging Face Transformers** and **vLLM** (for high-speed inference).
