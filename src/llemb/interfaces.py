@@ -7,7 +7,7 @@ class Backend(abc.ABC):
     def encode(
         self,
         text: Union[str, List[str]],
-        pooling_method: str = "mean",
+        pooling_method: Optional[str] = None,
         layer_index: Optional[int] = None,
         prompt_template: Optional[str] = None,
         **kwargs: Any,
@@ -18,6 +18,7 @@ class Backend(abc.ABC):
         Args:
             text: Input text or list of texts.
             pooling_method: Pooling method ('mean', 'last_token', 'eos_token').
+                          If None, defaults to 'last_token' with template, otherwise 'mean'.
             layer_index: Layer index to extract embeddings from.
             prompt_template: Optional prompt template ('prompteol', 'pcoteol', 'ke').
             **kwargs: Additional backend-specific arguments.

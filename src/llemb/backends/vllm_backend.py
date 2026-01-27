@@ -72,7 +72,7 @@ class VLLMBackend(Backend):
     def encode(
         self,
         text: Union[str, List[str]],
-        pooling_method: str = "mean",
+        pooling_method: Optional[str] = None,
         layer_index: Optional[int] = None,
         prompt_template: Optional[str] = None,
         **kwargs: Any,
@@ -84,6 +84,13 @@ class VLLMBackend(Backend):
         """
         if self.model is None:
             raise RuntimeError("vLLM Model not initialized")
+
+        # Smart default: use last_token pooling when template is provided
+        if pooling_method is None:
+            if prompt_template is not None:
+                pooling_method = "last_token"
+            else:
+                pooling_method = "mean"
 
         # vLLM backend warning for layer_index
         if layer_index is not None and layer_index != -1:

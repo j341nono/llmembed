@@ -65,7 +65,7 @@ class Encoder:
     def encode(
         self,
         text: Union[str, List[str]],
-        pooling_method: str = "mean",
+        pooling_method: Optional[str] = None,
         layer_index: Optional[int] = None,
         prompt_template: Optional[str] = None,
         batch_size: Optional[int] = None,
@@ -77,6 +77,8 @@ class Encoder:
         Args:
             text: Input text or list of texts.
             pooling_method: Pooling method ('mean', 'last_token', 'eos_token').
+                          If None, defaults to 'last_token' when prompt_template is specified,
+                          otherwise defaults to 'mean'.
             layer_index: Layer index to extract embeddings from.
                         If None, defaults to -2 for 'pcoteol'/'ke' templates, -1 otherwise.
                         Note: vLLM backend typically only supports the last layer (-1).
@@ -88,6 +90,13 @@ class Encoder:
         Returns:
             Embeddings as numpy array or torch tensor.
         """
+        # Smart default: use last_token pooling when template is provided
+        if pooling_method is None:
+            if prompt_template is not None:
+                pooling_method = "last_token"
+            else:
+                pooling_method = "mean"
+        
         if isinstance(text, str):
             text = [text]
 

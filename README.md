@@ -119,7 +119,6 @@ enc = llemb.Encoder("meta-llama/Llama-3.1-8B")
 # Use PromptEOL template with last_token pooling
 embeddings = enc.encode(
     "Hello world",
-    pooling_method="last_token",
     prompt_template="prompteol"
 )
 
