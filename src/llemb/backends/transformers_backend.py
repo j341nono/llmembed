@@ -121,9 +121,7 @@ class TransformersBackend(Backend):
                 for t in text
             ]
 
-        inputs = self.tokenizer(text, return_tensors="pt", padding=True, truncation=True).to(
-            self.model.device
-        )
+        inputs = self.tokenizer(text, return_tensors="pt", padding=True, truncation=True).to(self.model.device)
 
         with torch.no_grad():
             outputs = self.model(**inputs, output_hidden_states=True)
