@@ -160,18 +160,6 @@ class VLLMBackend(Backend):
             elif pooling == "last_token":
                 emb = token_embeddings[-1]
 
-            elif pooling == "index":
-                target_idx = kwargs.get("token_index", -1)
-                seq_len = token_embeddings.size(0)
-                try:
-                    emb = token_embeddings[target_idx]
-                except IndexError:
-                    logger.warning(
-                        f"Requested token_index={target_idx} is out of bounds for sequence {i} "
-                        f"(length={seq_len}). Falling back to last token."
-                    )
-                    emb = token_embeddings[-1]
-
             elif pooling == "eos_token":
                 if hasattr(output, "prompt_token_ids"):
                     token_ids = output.prompt_token_ids

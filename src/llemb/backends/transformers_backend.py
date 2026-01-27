@@ -144,21 +144,6 @@ class TransformersBackend(Backend):
             # With left padding, the last token is always at index -1
             embeddings = hidden_states[:, -1, :]
 
-        elif pooling == "index":
-            target_idx = kwargs.get("token_index", -1)
-            batch_size = hidden_states.size(0)
-            seq_len = hidden_states.size(1)
-
-            if not (-seq_len <= target_idx < seq_len):
-                logger.warning(
-                    f"Requested token_index={target_idx} is out of bounds "
-                    f"for sequence length {seq_len}. Falling back to last token."
-                )
-                # Fallback to last token (simplified for left padding)
-                embeddings = hidden_states[:, -1, :]
-            else:
-                embeddings = hidden_states[:, target_idx, :]
-
         elif pooling == "eos_token":
             # Use attention_mask to find the last non-padding token
             # With left padding, the last token is also the effective EOS token

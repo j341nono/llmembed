@@ -53,22 +53,6 @@ def test_encode_eos_token(backend):
     emb_fallback = backend.encode(text_no_eos, pooling="eos_token")
     assert emb_fallback.shape[0] == 1
 
-def test_encode_index(backend):
-    text = "hello world"
-    # Index 0 (first token)
-    emb_first = backend.encode(text, pooling="index", token_index=0)
-    # Index -1 (last token)
-    emb_last = backend.encode(text, pooling="index", token_index=-1)
-    
-    assert not torch.allclose(emb_first, emb_last)
-
-def test_encode_index_oob(backend):
-    """Test out-of-bounds fallback for 'index' pooling."""
-    text = "hello"
-    # Requesting invalid index should fallback to last token
-    emb = backend.encode(text, pooling="index", token_index=999)
-    assert emb.shape[0] == 1
-
 def test_encode_prompt_strategies(backend):
     """Test prompt engineering strategies (pcoteol, ke, prompt_eol)."""
     text = "hello world"
