@@ -121,13 +121,6 @@ embeddings = enc.encode(
     prompt_template="pcoteol"
 )
 
-# You can still specify pooling_method explicitly if needed
-embeddings = enc.encode(
-    "Hello world",
-    pooling_method="mean",  # Override default last_token
-    prompt_template="pcoteol"
-)
-
 # Or override the layer index
 embeddings = enc.encode(
     "Hello world",
