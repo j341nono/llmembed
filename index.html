@@ -1,0 +1,1134 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>llemb</title>
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#llemb-unified-embedding-extraction-from-decoder-only-llms" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="." title="llemb" class="md-header__button md-logo" aria-label="llemb" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            llemb
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Home
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="." title="llemb" class="md-nav__button md-logo" aria-label="llemb" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    llemb
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="." class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#features" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Features
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Installation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#getting-started" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Getting Started
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Getting Started">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#basic-usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Basic Usage
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#batch-processing-recommended-for-large-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Batch Processing (Recommended for Large Data)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-vllm-backend" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Using vLLM Backend
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-prompt-templates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Using Prompt Templates
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#advanced-usage-quantization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Advanced Usage (Quantization)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration-optimization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration &amp; Optimization
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#supported-pooling-methods-prompt-templates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Supported Pooling Methods &amp; Prompt Templates
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Supported Pooling Methods &amp; Prompt Templates">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pooling-methods-pooling_method-parameter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pooling Methods (pooling_method parameter)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#prompt-templates-prompt_template-parameter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prompt Templates (prompt_template parameter)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#migration-guide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Migration Guide
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Migration Guide">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#breaking-changes-in-v022" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Breaking Changes in v0.2.2
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#migration-examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Migration Examples
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#benefits-of-the-new-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Benefits of the New API
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#development" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Development
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#citations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Citations
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#license" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        License
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#features" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Features
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Installation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#getting-started" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Getting Started
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Getting Started">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#basic-usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Basic Usage
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#batch-processing-recommended-for-large-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Batch Processing (Recommended for Large Data)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-vllm-backend" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Using vLLM Backend
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-prompt-templates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Using Prompt Templates
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#advanced-usage-quantization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Advanced Usage (Quantization)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration-optimization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration &amp; Optimization
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#supported-pooling-methods-prompt-templates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Supported Pooling Methods &amp; Prompt Templates
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Supported Pooling Methods &amp; Prompt Templates">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pooling-methods-pooling_method-parameter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pooling Methods (pooling_method parameter)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#prompt-templates-prompt_template-parameter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prompt Templates (prompt_template parameter)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#migration-guide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Migration Guide
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Migration Guide">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#breaking-changes-in-v022" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Breaking Changes in v0.2.2
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#migration-examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Migration Examples
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#benefits-of-the-new-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Benefits of the New API
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#development" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Development
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#citations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Citations
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#license" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        License
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<p><a href="https://pypi.org/project/llemb/"><img alt="PyPI - Python Version" src="https://img.shields.io/pypi/pyversions/llemb?logo=pypi&amp;style=flat&amp;color=blue" /></a>
+<a href="https://pypi.org/project/llemb/"><img alt="PyPI - Package Version" src="https://img.shields.io/pypi/v/llemb?logo=pypi&amp;style=flat&amp;color=orange" /></a>
+<a href="https://github.com/j341nono/llemb/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/github/license/j341nono/llemb?logo=github&amp;style=flat&amp;color=green" /></a></p>
+<h1 id="llemb-unified-embedding-extraction-from-decoder-only-llms">llemb: Unified Embedding Extraction from Decoder-only LLMs</h1>
+<p><strong>llemb</strong> is a lightweight framework designed to extract high-quality sentence embeddings from Decoder-only Large Language Models (LLMs) like Llama, Mistral, and others. It unifies various state-of-the-art pooling strategies and efficiency optimizations into a simple, coherent interface.</p>
+<p>With <code>llemb</code>, you can easily leverage powerful LLMs for embedding tasks using advanced techniques like <strong>PromptEOL</strong> and <strong>PCoTEOL</strong>, with built-in support for <strong>Batch Processing</strong> and <strong>vLLM</strong> for high-throughput inference.</p>
+<blockquote>
+<p><strong>Origin of the Name</strong>
+<strong>llemb</strong> is a coined name derived from <strong>LLM</strong> and <strong>Embedding</strong>. In Japanese pronunciation, the letter <em>M</em> in <strong>LLM</strong> is read as /ɛm/ (emu), and <strong>Embedding</strong> begins with <em>Em</em>, which is pronounced /ɛm/ as well. Overlapping this sound reflects the idea of merging LLMs and embeddings.</p>
+</blockquote>
+<h2 id="features">Features</h2>
+<ul>
+<li><strong>Flexible Backends</strong>: Seamless support for <strong>Hugging Face Transformers</strong> and <strong>vLLM</strong> (for high-speed inference).</li>
+<li><strong>Advanced Pooling &amp; Prompting</strong>:<ul>
+<li><strong>Pooling Methods</strong>: <code>mean</code>, <code>last_token</code>, <code>eos_token</code></li>
+<li><strong>Prompt Templates</strong>: <code>prompteol</code>, <code>pcoteol</code> (Pretended Chain of Thought), <code>ke</code> (Knowledge Enhancement)</li>
+<li><strong>Independent Control</strong>: Combine any pooling method with any prompt template</li>
+</ul>
+</li>
+<li><strong>High-Performance</strong>:<ul>
+<li><strong>Batch Processing</strong>: Efficiently handles large datasets with automatic CPU offloading and progress bars (<code>tqdm</code>).</li>
+<li><strong>Quantization</strong>: Native support for <strong>4-bit and 8-bit</strong> via <code>bitsandbytes</code> (Transformers) or <code>fp8</code>/<code>awq</code>/<code>gptq</code> (vLLM).</li>
+</ul>
+</li>
+<li><strong>Granular Control</strong>: Extract embeddings from any layer (defaults to recommended layers based on research).</li>
+</ul>
+<h2 id="installation">Installation</h2>
+<p>Install via PyPI using <code>pip</code> or <code>uv</code>.</p>
+<p><strong>Basic Installation (includes quantization support)</strong></p>
+<pre><code class="language-bash">pip install llemb
+# or
+uv add llemb
+</code></pre>
+<p>Starting from v0.2.2, <code>bitsandbytes</code> for quantization is included by default.</p>
+<p><strong>With vLLM Support</strong></p>
+<p>To enable the vLLM backend for faster inference:</p>
+<pre><code class="language-bash">pip install &quot;llemb[vllm]&quot;
+# or
+uv add llemb[vllm]
+</code></pre>
+<h2 id="getting-started">Getting Started</h2>
+<p>Initialize the encoder and start extracting embeddings in just a few lines of code.</p>
+<h3 id="basic-usage">Basic Usage</h3>
+<pre><code class="language-python">import llemb
+
+# 1. Initialize the encoder (defaults to auto-device detection)
+enc = llemb.Encoder(&quot;meta-llama/Llama-3.1-8B&quot;)
+
+# 2. Extract embeddings using mean pooling
+embeddings = enc.encode(&quot;Hello world&quot;, pooling_method=&quot;mean&quot;)
+
+print(embeddings.shape)
+# =&gt; (1, 4096)
+</code></pre>
+<h3 id="batch-processing-recommended-for-large-data">Batch Processing (Recommended for Large Data)</h3>
+<p>Process lists of texts efficiently. <code>llemb</code> handles batching, progress tracking with <code>tqdm</code>, and memory management by automatically offloading computed embeddings to the CPU to prevent GPU VRAM saturation.</p>
+<pre><code class="language-python">texts = [
+    &quot;The quick brown fox jumps over the lazy dog.&quot;,
+    &quot;Machine learning is fascinating.&quot;,
+    # ... thousands of texts ...
+]
+
+# Process in batches of 32
+embeddings = enc.encode(texts, batch_size=32, pooling_method=&quot;mean&quot;)
+
+print(embeddings.shape)
+# =&gt; (N, 4096)
+</code></pre>
+<h3 id="using-vllm-backend">Using vLLM Backend</h3>
+<p>For maximum throughput on supported hardware, use the vLLM backend. You can pass vLLM-specific arguments (like <code>tensor_parallel_size</code> or <code>gpu_memory_utilization</code>) directly to the encoder.</p>
+<pre><code class="language-python">enc = llemb.Encoder(
+    &quot;meta-llama/Llama-3.1-8B&quot;,
+    backend=&quot;vllm&quot;,
+    tensor_parallel_size=1,       # Number of GPUs
+    gpu_memory_utilization=0.9    # vLLM memory setting
+)
+
+embeddings = enc.encode(&quot;Hello vLLM&quot;, pooling_method=&quot;last_token&quot;)
+</code></pre>
+<h3 id="using-prompt-templates">Using Prompt Templates</h3>
+<p>Leverage research-backed prompt templates to improve embedding quality. When you specify a template, <code>pooling_method</code> automatically defaults to <code>last_token</code>.</p>
+<pre><code class="language-python">import llemb
+
+enc = llemb.Encoder(&quot;meta-llama/Llama-3.1-8B&quot;)
+
+# Simple usage - pooling_method automatically defaults to last_token
+embeddings = enc.encode(
+    &quot;Hello world&quot;,
+    prompt_template=&quot;prompteol&quot;
+)
+
+# Use PCoTEOL (Pretended Chain of Thought) template
+# Note: Automatically uses layer -2 when prompt_template is &quot;pcoteol&quot; or &quot;ke&quot;
+embeddings = enc.encode(
+    &quot;Hello world&quot;,
+    prompt_template=&quot;pcoteol&quot;
+)
+
+# Or override the layer index
+embeddings = enc.encode(
+    &quot;Hello world&quot;,
+    prompt_template=&quot;pcoteol&quot;,
+    layer_index=-1  # Override default -2
+)
+</code></pre>
+<h3 id="advanced-usage-quantization">Advanced Usage (Quantization)</h3>
+<p>Use quantization to reduce memory usage.</p>
+<pre><code class="language-python">import llemb
+
+# Initialize with 4-bit quantization and force CUDA
+enc = llemb.Encoder(
+    model_name=&quot;meta-llama/Llama-3.1-8B&quot;,
+    backend=&quot;transformers&quot;,
+    device=&quot;cuda&quot;,
+    quantization=&quot;4bit&quot;
+)
+
+embeddings = enc.encode(
+    &quot;Hello world&quot;,
+    pooling_method=&quot;mean&quot;,
+    prompt_template=&quot;ke&quot;  # Knowledge Enhancement template
+)
+</code></pre>
+<h2 id="configuration-optimization">Configuration &amp; Optimization</h2>
+<p><code>llemb</code> passes arguments directly to the backend, allowing for deep customization.</p>
+<p><strong>Using Flash Attention 2</strong></p>
+<pre><code class="language-python">import torch
+
+encoder = llemb.Encoder(
+    model_name=&quot;meta-llama/Llama-3.1-8B&quot;,
+    attn_implementation=&quot;flash_attention_2&quot;,
+    torch_dtype=torch.bfloat16
+)
+</code></pre>
+<p><strong>Custom Quantization Config</strong></p>
+<pre><code class="language-python">from transformers import BitsAndBytesConfig
+import torch
+
+bnb_config = BitsAndBytesConfig(
+    load_in_4bit=True,
+    bnb_4bit_compute_dtype=torch.bfloat16
+)
+
+encoder = llemb.Encoder(
+    model_name=&quot;meta-llama/Llama-3.1-8B&quot;,
+    quantization_config=bnb_config
+)
+</code></pre>
+<h2 id="supported-pooling-methods-prompt-templates">Supported Pooling Methods &amp; Prompt Templates</h2>
+<h3 id="pooling-methods-pooling_method-parameter">Pooling Methods (<code>pooling_method</code> parameter)</h3>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Description</th>
+<th>Default Layer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mean</code></td>
+<td>Average pooling of all tokens (excluding padding).</td>
+<td>-1 (Last)</td>
+</tr>
+<tr>
+<td><code>last_token</code></td>
+<td>Vector of the last generated token.</td>
+<td>-1 (Last)</td>
+</tr>
+<tr>
+<td><code>eos_token</code></td>
+<td>Vector corresponding to the EOS token position.</td>
+<td>-1 (Last)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="prompt-templates-prompt_template-parameter">Prompt Templates (<code>prompt_template</code> parameter)</h3>
+<table>
+<thead>
+<tr>
+<th>Template</th>
+<th>Description</th>
+<th>Default Layer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>prompteol</code></td>
+<td>Simple prompt template targeting the last token.</td>
+<td>-1 (Last)</td>
+</tr>
+<tr>
+<td><code>pcoteol</code></td>
+<td>"Pretended Chain of Thought" - wraps input in a reasoning template.</td>
+<td>-2</td>
+</tr>
+<tr>
+<td><code>ke</code></td>
+<td>"Knowledge Enhancement" - wraps input in a context-aware template.</td>
+<td>-2</td>
+</tr>
+</tbody>
+</table>
+<p>You can combine any pooling method with any prompt template. When using <code>pcoteol</code> or <code>ke</code> templates, the default layer is automatically set to -2 unless explicitly overridden.</p>
+<p><strong>Smart Defaults (v0.2.2+):</strong>
+- When <code>prompt_template</code> is specified, <code>pooling_method</code> automatically defaults to <code>last_token</code>
+- When no <code>prompt_template</code> is specified, <code>pooling_method</code> defaults to <code>mean</code>
+- Explicit values always take precedence</p>
+<h2 id="migration-guide">Migration Guide</h2>
+<p>If you're upgrading from an earlier version of <code>llemb</code>, the API has been refactored to separate pooling methods and prompt templates into orthogonal parameters.</p>
+<h3 id="breaking-changes-in-v022">Breaking Changes in v0.2.2</h3>
+<ol>
+<li><strong>API Refactoring</strong>: <code>pooling</code> parameter split into <code>pooling_method</code> and <code>prompt_template</code></li>
+<li><strong>Smart Defaults</strong>: <code>pooling_method</code> automatically set to <code>last_token</code> when using templates</li>
+<li><strong>Dependencies</strong>: <code>bitsandbytes</code> is now a core dependency (no longer optional)</li>
+<li><strong>Removed</strong>: <code>index</code> pooling strategy has been removed</li>
+</ol>
+<p><strong>Old API (deprecated):</strong></p>
+<pre><code class="language-python"># Old: pooling parameter mixed strategies and templates
+enc.encode(&quot;text&quot;, pooling=&quot;mean&quot;)
+enc.encode(&quot;text&quot;, pooling=&quot;pcoteol&quot;)  # Mixed template + pooling
+enc.encode(&quot;text&quot;, pooling=&quot;index&quot;, token_index=0)  # Index strategy
+</code></pre>
+<p><strong>New API (v0.2.2+):</strong></p>
+<pre><code class="language-python"># New: separate parameters with smart defaults
+enc.encode(&quot;text&quot;, pooling_method=&quot;mean&quot;)
+enc.encode(&quot;text&quot;, prompt_template=&quot;pcoteol&quot;)  # pooling_method auto-set to last_token
+# Index strategy has been removed
+</code></pre>
+<h3 id="migration-examples">Migration Examples</h3>
+<table>
+<thead>
+<tr>
+<th>Old Code</th>
+<th>New Code (Explicit)</th>
+<th>New Code (Smart Default)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>enc.encode(text, pooling="mean")</code></td>
+<td><code>enc.encode(text, pooling_method="mean")</code></td>
+<td><code>enc.encode(text)</code></td>
+</tr>
+<tr>
+<td><code>enc.encode(text, pooling="last_token")</code></td>
+<td><code>enc.encode(text, pooling_method="last_token")</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>enc.encode(text, pooling="eos_token")</code></td>
+<td><code>enc.encode(text, pooling_method="eos_token")</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>enc.encode(text, pooling="prompteol")</code></td>
+<td><code>enc.encode(text, pooling_method="last_token", prompt_template="prompteol")</code></td>
+<td><code>enc.encode(text, prompt_template="prompteol")</code></td>
+</tr>
+<tr>
+<td><code>enc.encode(text, pooling="pcoteol")</code></td>
+<td><code>enc.encode(text, pooling_method="last_token", prompt_template="pcoteol")</code></td>
+<td><code>enc.encode(text, prompt_template="pcoteol")</code></td>
+</tr>
+<tr>
+<td><code>enc.encode(text, pooling="ke")</code></td>
+<td><code>enc.encode(text, pooling_method="last_token", prompt_template="ke")</code></td>
+<td><code>enc.encode(text, prompt_template="ke")</code></td>
+</tr>
+<tr>
+<td><code>enc.encode(text, pooling="index", token_index=0)</code></td>
+<td><em>Removed - use <code>last_token</code> or implement custom logic</em></td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<h3 id="benefits-of-the-new-api">Benefits of the New API</h3>
+<ol>
+<li><strong>Orthogonality</strong>: You can now combine any pooling method with any prompt template.</li>
+<li><strong>Clarity</strong>: The separation makes it clear what each parameter does.</li>
+<li><strong>Flexibility</strong>: Easier to experiment with different combinations.</li>
+<li><strong>Smart Defaults</strong>: </li>
+<li><code>pooling_method</code> automatically set to <code>last_token</code> when using templates</li>
+<li>Layer indices automatically set based on prompt template (can be overridden)</li>
+<li><strong>Simpler Usage</strong>: Less boilerplate for common use cases with templates.</li>
+</ol>
+<h2 id="development">Development</h2>
+<p>Clone the repository and sync dependencies using <code>uv</code>:</p>
+<pre><code class="language-bash">git clone https://github.com/j341nono/llemb.git
+cd llemb
+uv sync --all-extras --dev
+</code></pre>
+<p><strong>Run Tests</strong></p>
+<pre><code class="language-bash">uv run pytest
+</code></pre>
+<p><strong>Static Analysis</strong></p>
+<pre><code class="language-bash">uv run ruff check src
+uv run mypy src
+</code></pre>
+<h2 id="citations">Citations</h2>
+<p>If you use the advanced pooling strategies implemented in this library, please cite the respective original papers:</p>
+<p><strong>PromptEOL:</strong></p>
+<pre><code class="language-bibtex">@inproceedings{jiang-etal-2024-scaling,
+    title = &quot;Scaling Sentence Embeddings with Large Language Models&quot;,
+    author = &quot;Jiang, Ting and Huang, Shaohan and Luan, Zhongzhi and Wang, Deqing and Zhuang, Fuzhen&quot;,
+    booktitle = &quot;Findings of the Association for Computational Linguistics: EMNLP 2024&quot;,
+    year = &quot;2024&quot;
+}
+</code></pre>
+<p><strong>PCoTEOL and KE:</strong></p>
+<pre><code class="language-bibtex">@article{zhang2024simple,
+    title={Simple Techniques for Enhancing Sentence Embeddings in Generative Language Models},
+    author={Zhang, Bowen and Chang, Kehua and Li, Chunping},
+    journal={arXiv preprint arXiv:2404.03921},
+    year={2024}
+}
+</code></pre>
+<h2 id="license">License</h2>
+<p>This project is open source and available under the <a href="https://www.google.com/search?q=LICENSE">Apache-2.0 license</a>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": [], "search": "assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
