@@ -44,29 +44,35 @@ class TestIntegration:
             else:
                 assert model_device.type == "cpu"
                 
-            emb = enc.encode("Device test", pooling="mean")
+            emb = enc.encode("Device test", pooling_method="mean")
             assert isinstance(emb, torch.Tensor) or isinstance(emb, np.ndarray)
             
         except Exception as e:
             pytest.fail(f"Failed to load or encode on {device}: {e}")
 
-    @pytest.mark.parametrize("pooling", [
-        "mean", 
-        "last_token", 
-        "eos_token", 
-        "prompt_eol", 
-        "pcoteol", 
-        "ke"
+    @pytest.mark.parametrize("pooling_method,prompt_template", [
+        ("mean", None), 
+        ("last_token", None), 
+        ("eos_token", None), 
+        ("last_token", "prompteol"), 
+        ("last_token", "pcoteol"), 
+        ("last_token", "ke")
     ])
-    def test_pooling_strategies(self, shared_encoder_cpu, pooling):
+    def test_pooling_strategies(self, shared_encoder_cpu, pooling_method, prompt_template):
         enc = shared_encoder_cpu
-        embeddings = enc.encode(SAMPLE_TEXTS, pooling=pooling)
+        embeddings = enc.encode(
+            SAMPLE_TEXTS,
+            pooling_method=pooling_method,
+            prompt_template=prompt_template
+        )
         
         expected_dim = enc.backend_instance.model.config.hidden_size
         
         assert embeddings.shape[0] == len(SAMPLE_TEXTS)
         assert embeddings.shape[1] == expected_dim
-        assert not torch.isnan(torch.tensor(embeddings)).any(), f"NaN found in {pooling}"
+        assert not torch.isnan(torch.tensor(embeddings)).any(), (
+            f"NaN found in {pooling_method}/{prompt_template}"
+        )
 
     def test_batch_processing_consistency(self, shared_encoder_cpu):
         enc = shared_encoder_cpu
@@ -102,7 +108,7 @@ class TestIntegration:
             if hasattr(enc.backend_instance.model, "hf_device_map"):
                 assert len(enc.backend_instance.model.hf_device_map) > 0
             
-            emb = enc.encode("Quantization test", pooling="mean")
+            emb = enc.encode("Quantization test", pooling_method="mean")
             assert emb.shape[0] == 1
             
         except ImportError:
@@ -116,13 +122,13 @@ class TestIntegration:
     def test_layer_selection(self, shared_encoder_cpu):
         enc = shared_encoder_cpu
         
-        emb_last = enc.encode("Layer test", layer_index=-1, pooling="mean")
+        emb_last = enc.encode("Layer test", layer_index=-1, pooling_method="mean")
         
         num_layers = enc.backend_instance.model.config.n_layer
         target_layer = -2
         
         if num_layers >= abs(target_layer):
-            emb_prev = enc.encode("Layer test", layer_index=target_layer, pooling="mean")
+            emb_prev = enc.encode("Layer test", layer_index=target_layer, pooling_method="mean")
             
             assert not torch.allclose(torch.as_tensor(emb_last), torch.as_tensor(emb_prev)), \
                 "Layer -1 and -2 produced identical embeddings (unexpected)"

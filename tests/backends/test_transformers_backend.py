@@ -22,58 +22,42 @@ def test_auto_device_cpu():
     assert backend.device in ["cpu", "cuda", "mps"]
 
 def test_encode_mean(backend):
-    emb = backend.encode("hello world", pooling="mean")
+    emb = backend.encode("hello world", pooling_method="mean")
     assert isinstance(emb, torch.Tensor)
     assert emb.ndim == 2
     assert emb.shape[0] == 1
     assert emb.shape[1] > 0
 
 def test_encode_batch(backend):
-    emb = backend.encode(["hello", "world"], pooling="mean")
+    emb = backend.encode(["hello", "world"], pooling_method="mean")
     assert emb.shape[0] == 2
 
 def test_empty_input(backend):
-    emb = backend.encode([], pooling="mean")
+    emb = backend.encode([], pooling_method="mean")
     assert emb.numel() == 0
 
 # --- Pooling Strategy Tests ---
 
 def test_encode_last_token(backend):
-    emb = backend.encode("hello world", pooling="last_token")
+    emb = backend.encode("hello world", pooling_method="last_token")
     assert emb.shape[0] == 1
 
 def test_encode_eos_token(backend):
-    # Case 1: EOS exists
-    text = "hello world" + backend.tokenizer.eos_token
-    emb = backend.encode(text, pooling="eos_token")
-    assert emb.shape[0] == 1
-    
-    # Case 2: Fallback (no EOS)
-    text_no_eos = "hello world"
-    emb_fallback = backend.encode(text_no_eos, pooling="eos_token")
-    assert emb_fallback.shape[0] == 1
-
-def test_encode_index(backend):
+    # Case 1: EOS will be appended automatically
     text = "hello world"
-    # Index 0 (first token)
-    emb_first = backend.encode(text, pooling="index", token_index=0)
-    # Index -1 (last token)
-    emb_last = backend.encode(text, pooling="index", token_index=-1)
-    
-    assert not torch.allclose(emb_first, emb_last)
-
-def test_encode_index_oob(backend):
-    """Test out-of-bounds fallback for 'index' pooling."""
-    text = "hello"
-    # Requesting invalid index should fallback to last token
-    emb = backend.encode(text, pooling="index", token_index=999)
+    emb = backend.encode(text, pooling_method="eos_token")
     assert emb.shape[0] == 1
+    
+    # Case 2: EOS already exists
+    text_with_eos = "hello world" + backend.tokenizer.eos_token
+    emb_with_eos = backend.encode(text_with_eos, pooling_method="eos_token")
+    assert emb_with_eos.shape[0] == 1
 
 def test_encode_prompt_strategies(backend):
-    """Test prompt engineering strategies (pcoteol, ke, prompt_eol)."""
+    """Test prompt engineering strategies (pcoteol, ke, prompteol)."""
     text = "hello world"
-    for strategy in ["prompt_eol", "pcoteol", "ke"]:
-        emb = backend.encode(text, pooling=strategy)
+    for template in ["prompteol", "pcoteol", "ke"]:
+        emb = backend.encode(text, pooling_method="last_token", prompt_template=template)
         assert emb.shape[0] == 1
         assert isinstance(emb, torch.Tensor)
 
@@ -87,12 +71,22 @@ def test_layer_index_selection(backend):
 
 def test_layer_index_defaults(backend):
     """Verify default layer selection logic."""
-    # 'pcoteol' defaults to layer -2
-    emb_p_default = backend.encode("hello", pooling="pcoteol", layer_index=None)
-    emb_p_explicit = backend.encode("hello", pooling="pcoteol", layer_index=-2)
+    # 'pcoteol' template defaults to layer -2
+    emb_p_default = backend.encode(
+        "hello",
+        pooling_method="last_token",
+        prompt_template="pcoteol",
+        layer_index=None
+    )
+    emb_p_explicit = backend.encode(
+        "hello",
+        pooling_method="last_token",
+        prompt_template="pcoteol",
+        layer_index=-2
+    )
     assert torch.allclose(emb_p_default, emb_p_explicit)
 
-    # 'mean' defaults to layer -1
-    emb_m_default = backend.encode("hello", pooling="mean", layer_index=None)
-    emb_m_explicit = backend.encode("hello", pooling="mean", layer_index=-1)
+    # 'mean' without template defaults to layer -1
+    emb_m_default = backend.encode("hello", pooling_method="mean", layer_index=None)
+    emb_m_explicit = backend.encode("hello", pooling_method="mean", layer_index=-1)
     assert torch.allclose(emb_m_default, emb_m_explicit)
