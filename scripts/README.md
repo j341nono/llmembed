@@ -14,6 +14,7 @@ A comprehensive GPU verification script that tests llemb v0.2.2 with quantizatio
 4. **Smart Defaults API**: Tests the new v0.2.2 feature where `pooling_method` automatically defaults to `last_token` when using `prompt_template`
 5. **Inference Validation**: Verifies that embeddings are generated correctly without NaN or Inf values
 6. **Layer Index Defaults**: Confirms that layer indices are correctly defaulted based on template type
+7. **Mixed Precision Handling**: All tensor comparisons use `.float()` casting to safely handle Float16/Float32 differences from quantized models
 
 ### Prerequisites
 
