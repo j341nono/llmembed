@@ -14,6 +14,9 @@ except ImportError:
 
 logger = logging.getLogger(__name__)
 
+# Valid pooling methods
+VALID_POOLING_METHODS = {"mean", "last_token", "eos_token"}
+
 
 class Encoder:
     def __init__(
@@ -38,11 +41,16 @@ class Encoder:
         """
         self.backend_name = backend
         self.backend_instance: Backend
+        
+        logger.debug(f"Initializing Encoder with model='{model_name}', backend='{backend}'")
+        logger.debug(f"Device: {device}, Quantization: {quantization}")
 
         if backend == "transformers":
+            logger.debug("Loading Transformers backend...")
             self.backend_instance = TransformersBackend(
                 model_name, device=device, quantization=quantization, **kwargs
             )
+            logger.debug("Transformers backend loaded successfully")
         elif backend == "vllm":
             if VLLMBackend is None:
                 raise ImportError(
@@ -53,10 +61,12 @@ class Encoder:
             # vLLM backend requires a strict string for device (e.g. "cuda").
             # If 'device' is None (auto), default to "cuda".
             vllm_device = device if device is not None else "cuda"
-
+            
+            logger.debug(f"Loading vLLM backend with device='{vllm_device}'...")
             self.backend_instance = VLLMBackend(
                 model_name, device=vllm_device, quantization=quantization, **kwargs
             )
+            logger.debug("vLLM backend loaded successfully")
         else:
             raise ValueError(
                 f"Unknown backend: {backend}. Supported backends are 'transformers' and 'vllm'."
@@ -70,7 +80,7 @@ class Encoder:
         prompt_template: Optional[str] = None,
         batch_size: Optional[int] = None,
         **kwargs: Any,
-    ) -> Any:
+    ) -> torch.Tensor:
         """
         Encode text into embeddings.
 
@@ -85,10 +95,14 @@ class Encoder:
             prompt_template: Optional prompt template ('prompteol', 'pcoteol', 'ke').
                            When specified, wraps the input text with the template.
             batch_size: Batch size for processing. If None, processes all inputs at once.
+                       Must be > 0 if provided.
             **kwargs: Backend specific arguments.
 
         Returns:
-            Embeddings as numpy array or torch tensor.
+            Embeddings as torch tensor.
+            
+        Raises:
+            ValueError: If pooling_method is invalid or batch_size <= 0.
         """
         # Smart default: use last_token pooling when template is provided
         if pooling_method is None:
@@ -97,15 +111,35 @@ class Encoder:
             else:
                 pooling_method = "mean"
         
+        # Validate pooling_method
+        if pooling_method not in VALID_POOLING_METHODS:
+            raise ValueError(
+                f"Invalid pooling_method: '{pooling_method}'. "
+                f"Valid options are: {', '.join(sorted(VALID_POOLING_METHODS))}"
+            )
+        
+        # Validate batch_size
+        if batch_size is not None and batch_size <= 0:
+            raise ValueError(
+                f"batch_size must be a positive integer, got: {batch_size}"
+            )
+        
         if isinstance(text, str):
             text = [text]
+        
+        logger.debug(
+            f"Encoding {len(text)} text(s) with pooling_method='{pooling_method}', "
+            f"layer_index={layer_index}, prompt_template={prompt_template}"
+        )
 
         if batch_size is None:
+            logger.debug("Processing all inputs in a single batch")
             return self.backend_instance.encode(
                 text, pooling_method=pooling_method, layer_index=layer_index, 
                 prompt_template=prompt_template, **kwargs
             )
 
+        logger.debug(f"Processing in batches of size {batch_size}")
         results = []
         total = len(text)
         
