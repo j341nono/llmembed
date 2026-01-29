@@ -92,11 +92,11 @@ class VLLMBackend(Backend):
             else:
                 pooling_method = "mean"
 
-        # vLLM backend warning for layer_index
+        # vLLM backend only supports last layer (-1)
         if layer_index is not None and layer_index != -1:
-            logger.warning(
-                f"layer_index={layer_index} was requested, but vLLM backend currently "
-                "only supports the last layer output. This parameter is ignored."
+            raise ValueError(
+                f"layer_index={layer_index} is not supported by vLLM backend. "
+                "vLLM currently only supports the last layer (layer_index=-1)."
             )
 
         if isinstance(text, str):
